@@ -1,31 +1,33 @@
 const mongoose = require('mongoose')
+const {
+  Schema
+} = mongoose
 
 mongoose.Promise = global.Promise
-mongoose.createConnection('mongodb://localhost/mongodb101', {
-  useMongoClient: true,
-  /* other options */
+mongoose.createConnection('mongodb://localhost:27017/mongodb101', {
+  useMongoClient: true
 }).then(db => {
-  console.log(db)
-  db.on('error', () => console.error('connection error:'));
-  db.once('open', () => {
-    console.log('MongoDB Started!')
 
-    const UserSchema = mongoose.Schema({
-      name: String
-    })
+  console.log('MongoDB Started!')
 
-    const User = mongoose.model('User', UserSchema)
+  const UserSchema = Schema({
+    name: String
+  }, {
+    timestamps: {}
+  })
+  const User = db.model('User', UserSchema)
 
-    const someUser = new User({
-      name: 'Jeng'
-    });
+  const someUser = new User({
+    name: 'Jeng'
+  });
 
-    User.find((a, b) => {
-      console.log(a, b)
-    })
-    someUser.save((err, cb) => {
+  someUser.save((err, userInDb) => {
+    if (err) return console.error(err)
+    console.log('userInDb', userInDb)
+
+    User.find((err, users) => {
       if (err) return console.error(err)
-      console.log(cb)
+      console.log('users', users)
     })
   })
 
