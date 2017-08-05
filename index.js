@@ -28,6 +28,8 @@ mongoose.createConnection('mongodb://localhost:27017/mongodb101', {
     User.find((err, users) => {
       if (err) return console.error(err)
       console.log('users', users)
+
+      User.remove().exec()
     })
   })
 
