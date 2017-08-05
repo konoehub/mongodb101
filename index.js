@@ -1,17 +1,32 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/mongodb101')
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('MongoDB Started!')
+mongoose.Promise = global.Promise
+mongoose.createConnection('mongodb://localhost/mongodb101', {
+  useMongoClient: true,
+  /* other options */
+}).then(db => {
+  console.log(db)
+  db.on('error', () => console.error('connection error:'));
+  db.once('open', () => {
+    console.log('MongoDB Started!')
+
+    const UserSchema = mongoose.Schema({
+      name: String
+    })
+
+    const User = mongoose.model('User', UserSchema)
+
+    const someUser = new User({
+      name: 'Jeng'
+    });
+
+    User.find((a, b) => {
+      console.log(a, b)
+    })
+    someUser.save((err, cb) => {
+      if (err) return console.error(err)
+      console.log(cb)
+    })
+  })
+
 })
-
-const kittySchema = mongoose.Schema({
-  name: String
-})
-
-const Kitten = mongoose.model('Kitten', kittySchema)
-
-const silence = new Kitten({ name: 'Silence' });
-console.log(silence.name); // 'Silence'
