@@ -21,16 +21,14 @@ mongoose.createConnection('mongodb://localhost:27017/mongodb101', {
     name: 'Jeng'
   });
 
-  someUser.save((err, userInDb) => {
-    if (err) return console.error(err)
+  someUser.save().then(userInDb => {
     console.log('userInDb', userInDb)
-
-    User.find((err, users) => {
-      if (err) return console.error(err)
-      console.log('users', users)
-
-      User.remove().exec()
-    })
+    return userInDb.remove()
+  }).then((responseFromRemove) => {
+    console.log('responseFromRemove', responseFromRemove)
+    return User.find({})
+  }).then(users => {
+    console.log('users', users)
   })
 
 })
