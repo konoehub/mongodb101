@@ -4,7 +4,7 @@ database.then(connection => {
   const UserModel = require('./models/user').createUserModel(connection)
 
   const someUser = new UserModel({
-    name: 'Jeng'
+    name: 'Ale'
   });
 
   const someUser2 = new UserModel({
@@ -15,12 +15,16 @@ database.then(connection => {
     name: 'Tee'
   });
 
-  const someUse4 = new UserModel({
+  const someUser4 = new UserModel({
     name: 'Dome'
   });
 
+  const someUser5 = new UserModel({
+    name: 'Jeng'
+  });
 
-  UserModel.collection.insert([someUser2,someUser3, someUse4]).then(userInDb => {
+
+  UserModel.collection.insert([someUser2,someUser3, someUser4, someUser5]).then(userInDb => {
     //console.log('userInDb', userInDb)
     
   })
